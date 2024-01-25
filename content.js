@@ -1,39 +1,35 @@
-let grimesPix = [
-    "http://bit.ly/3u824Ox",
-    "https://bit.ly/3StoRxJ",
-    "https://bit.ly/3UkDrsu",
-    "https://bit.ly/498xK5a",
-    "https://bit.ly/3vRe7An",
-    "https://bit.ly/4b6SM6b"
-]
+function setupThumbnailRedirectListeners() {
+    let grimesPix = [
+        "http://bit.ly/3u824Ox",
+        "https://bit.ly/3StoRxJ",
+        "https://bit.ly/3UkDrsu",
+        "https://bit.ly/498xK5a",
+        "https://bit.ly/3vRe7An",
+        "https://bit.ly/4b6SM6b"
+    ]
 
-function grimes() {
-    const pix = document.getElementsByTagName('img');
+    const index = Math.floor(Math.random() * grimesPix.length);
+    const grimesThumbnail = grimesPix[index];
 
-    for (let p of pix) {
-        if (!grimesPix.includes(p.src)) {
-            p.style.visibility = 'hidden'; // Hide the image
-            const index = Math.floor(Math.random() * grimesPix.length);
-            p.src = grimesPix[index];
-            p.onload = () => { p.style.visibility = 'visible'; }; // Reveal the image once it has loaded
-        }
-    }
-}
-
-// Run grimes once at the start
-grimes();
-
-// Set up a MutationObserver to watch for new images
-const observer = new MutationObserver((mutationsList, observer) => {
-    for(let mutation of mutationsList) {
-        if (mutation.type === 'childList') {
-            mutation.addedNodes.forEach((node) => {
-                if (node.nodeName.toLowerCase() === 'img') {
-                    grimes();
+    chrome.declarativeNetRequest.updateDynamicRules({
+        addRules: [
+            {
+                "id": 1,
+                "priority": 1,
+                "action": {
+                    "type": "redirect",
+                    "redirect": {
+                        "regexSubstitution": grimesThumbnail
+                    }
+                },
+                "condition": {
+                    "regexFilter": "^https://i.ytimg.com/(vi|vi_webp)/(.*)/(default|hqdefault|mqdefault|sddefault|hq720)(_custom_[0-9]+)?.jpg(.*)",
+                    "resourceTypes": [
+                        "image"
+                    ]
                 }
-            });
-        }
-    }
-});
-
-observer.observe(document.body, { childList: true, subtree: true });
+            }
+        ],
+        removeRuleIds: [1]
+    })
+}
