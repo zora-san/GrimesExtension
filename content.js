@@ -12,8 +12,10 @@ function grimes() {
 
     for (let p of pix) {
         if (!grimesPix.includes(p.src)) {
+            p.style.visibility = 'hidden'; // Hide the image
             const index = Math.floor(Math.random() * grimesPix.length);
             p.src = grimesPix[index];
+            p.onload = () => { p.style.visibility = 'visible'; }; // Reveal the image once it has loaded
         }
     }
 }
