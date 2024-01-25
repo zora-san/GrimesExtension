@@ -7,9 +7,15 @@ let grimesPix = [
     "https://bit.ly/4b6SM6b"
 ]
 
-const pix = document.getElementsByTagName('img');
+function grimes() {
+    const pix = document.getElementsByTagName('img');
 
-for (p of pix) {
-    const index = Math.floor(Math.random() * grimesPix.length);
-    p.src = grimesPix[index];
+    for (p of pix) {
+        if (!grimesPix.includes(pix.src)) {
+            const index = Math.floor(Math.random() * grimesPix.length);
+            p.src = grimesPix[index];
+        }
+    }
 }
+
+setInterval(grimes, 50);
