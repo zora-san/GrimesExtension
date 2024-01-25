@@ -1,0 +1,12 @@
+{
+    "manifest_version": 3,
+    "name": "Grimes.io",
+    "version": "1.0.0",
+    "description": "Grimes for Youtube!",
+    "content_scripts": [
+        {
+            "matches": ["https://www.youtube.com/*"],
+            "js": ["content.js"]
+        }
+    ]
+}
