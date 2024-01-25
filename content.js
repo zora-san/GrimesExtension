@@ -4,19 +4,31 @@ let grimesPix = [
     "https://bit.ly/3UkDrsu",
     "https://bit.ly/498xK5a",
     "https://bit.ly/3vRe7An",
-    "https://bit.ly/4b6SM6b"
-]
+    // ...
+];
 
-function grimes() {
-    const pix = document.getElementsByTagName('img');
-
-    for (p of pix) {
-        if (pix.alt != "grimes") {
-            const index = Math.floor(Math.random() * grimesPix.length);
-            p.src = grimesPix[index];
-            p.alt = "grimes";
-        }
-    }
+function replaceImageSrc(img) {
+    const index = Math.floor(Math.random() * grimesPix.length);
+    img.src = grimesPix[index];
 }
 
-setInterval(grimes, 50);
+// Replace sources of existing images
+const pix = document.getElementsByTagName('img');
+for (let p of pix) {
+    replaceImageSrc(p);
+}
+
+// Set up a MutationObserver to watch for new images
+const observer = new MutationObserver((mutationsList, observer) => {
+    for(let mutation of mutationsList) {
+        if (mutation.type === 'childList') {
+            mutation.addedNodes.forEach((node) => {
+                if (node.nodeName.toLowerCase() === 'img') {
+                    replaceImageSrc(node);
+                }
+            });
+        }
+    }
+});
+
+observer.observe(document.body, { childList: true, subtree: true });
