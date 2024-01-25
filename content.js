@@ -10,7 +10,7 @@ let grimesPix = [
 function grimes() {
     const pix = document.getElementsByTagName('img');
     for (p of pix) {
-        if (!grimesPix.includes(pix.src)) {
+        if (!grimesPix.includes(p.src)) {
             const index = Math.floor(Math.random() * grimesPix.length);
             p.src = grimesPix[index];
         }
